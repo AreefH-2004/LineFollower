@@ -53,7 +53,7 @@ void weighted_logic(int &irLeftVal,  int &leftState, int &centerState, int &righ
     float movement = 0;
 
     for (int i = 0; i < 5; i++) {
-        if (truth_values[i] == 1) {
+        if (truth_values[i] == 0) {
             movement += weights[i];
         }
     }
@@ -64,33 +64,46 @@ void weighted_logic(int &irLeftVal,  int &leftState, int &centerState, int &righ
 // const float rightirsensor_weight = 0.3f;
 
     if (movement == 0){
-          Serial.println("Robot: Forward");
-          servoleft.writeMicroseconds(1700);  // Right amount for forward
-          servoright.writeMicroseconds(1300); // Opposite direction forward
+          Serial.print(movement); Serial.println(" Robot: Forward");
+          servoleft.writeMicroseconds(1300); 
+          servoright.writeMicroseconds(1700); // Opposite direction forward
+          delay(30);  // Wait before repeating
+          
     }
-    else if (-0.3 < movement && movement < 0 ) {  // Corrected boundary check
+    else if (movement < -0.09 ) {  // Corrected boundary check
         // Slight left veer
-        servoleft.writeMicroseconds(1300);  
+        Serial.print(movement);Serial.println(" Robot: S Right");
+        servoleft.writeMicroseconds(1500);  
         servoright.writeMicroseconds(1700);
-        Serial.println("Robot: S Left");
+        delay(30);  // Wait before repeating
+ 
     } 
-    else if (0.3 > movement && movement > 0) {
-        // Slight right veer
-        servoleft.writeMicroseconds(1700);
-        servoright.writeMicroseconds(1300);
-        Serial.println("Robot: S Right");
+    else if (movement > 0.09) {
+        servoleft.writeMicroseconds(1300);  
+        servoright.writeMicroseconds(1500);
+  
+        Serial.print(movement);Serial.println(" Robot: S Left");
+        delay(30);  // Wait before repeating
     }
-    else if ( movement <= -0.3 ) {
-        // Hard left turn
-        servoleft.writeMicroseconds(1100);  // Left wheel slow (or reverse)
-        servoright.writeMicroseconds(1900); // Right wheel fast forward
-        Serial.println("Robot: Left");
-    } 
-    else if (movement >= 0.3) {
-        // Hard right turn
-        servoleft.writeMicroseconds(1900);  
-        servoright.writeMicroseconds(1100);
-        Serial.println("Robot: Right");
+    // else if ( movement <= -0.3 ) {
+    //     // Hard left turn
+    //     servoleft.writeMicroseconds(1100);  // Left wheel slow (or reverse)
+    //     servoright.writeMicroseconds(1900); // Right wheel fast forward
+    //     Serial.println("Robot: Left");
+    // } 
+    // else if (movement >= 0.3) {
+    //     // Hard right turn
+    //     servoleft.writeMicroseconds(1900);  
+    //     servoright.writeMicroseconds(1100);
+    //     Serial.println("Robot: Right");
+    // }
+    else{
+      
+       servoleft.writeMicroseconds(1500);
+       servoright.writeMicroseconds(1500);
+       delay(100);
+
+    Serial.print(movement); Serial.println(" Issue");
     }
 
     
@@ -134,10 +147,19 @@ void loop() {
     Serial.print(" | centerState: "); Serial.print(centerState);
     Serial.print(" | RightState: "); Serial.print(rightState);  // Moves to new line
     Serial.print(" | ir_rightState: "); Serial.println(Right_ir);
+    if (Left_ir == 1 && leftState == 1 && centerState == 1 && rightState == 1 && Right_ir == 1) {
+     servoleft.writeMicroseconds(1500);
+     servoright.writeMicroseconds(1500);
+      Serial.println(" Movement: NULL - Robot: Stop");
+   
+      delay(100);
 
-    // Forward movement when only the center sensor detects the line
-  
-   weighted_logic(Left_ir,  leftState, centerState, rightState, Right_ir);
+    }
+    else {
+          weighted_logic(Left_ir,  leftState, centerState, rightState, Right_ir);
+    }
+   
+    
   
 
   // if (( centerState == 0 &&  rightState == 1) && (leftState == 0 && centerState == 0 &&  rightState == 0) ) {
@@ -164,7 +186,7 @@ void loop() {
   // // Stop if no sensor detects the line 
   
 
-    delay(1000);  // Wait before repeating
+    delay(100);  // Wait before repeating
 
 
 }
