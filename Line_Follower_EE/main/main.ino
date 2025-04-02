@@ -1,10 +1,34 @@
+/*
+ * Line Follower Robot - Arduino Project
+ * 
+ * This program uses five IR sensors and a weighted logic system to follow a line
+ * with improved responsiveness. The weights prioritize sensors based on position, 
+ * enabling smoother turns and better error correction compared to binary thresholding.
+ *
+ * Components:
+ * - Funduino IR sensors
+ * - Arduino Uno
+ * - Servo motors (x2)
+ * - Differential salvaged from toy car
+ * - DC-DC step-down converter
+ *
+ * Author: [Areef Hossain]
+ * GitHub: [https://github.com/AreefH-2004]
+ */
+
+
 #include <Servo.h>
+// Implemented a weighted logic system to enhance the robot’s adaptability 
+// across various track layouts. Unlike rigid binary input handling, this approach assigns higher
+// influence to sensors detecting line presence, enabling smoother and more responsive navigation.
 
+//This weighted system takes in values from the funduino and ir sensors. 
 
+//Initializing ardunio pin I/O
 #define irSensor 2  // right
 #define irSensor1 8  //left
 
-// Servo Motor Pins
+// Servo Motor Pins - Arduino Shield
 const int motorleft = 4;   // Left rear wheel PWM pin
 const int motorright = 5;  // Right rear wheel PWM pin
 
@@ -18,14 +42,15 @@ const int irSensorRight = 2;
 Servo servoleft;
 Servo servoright;
 
-// Global constants (defined in constants.h)
+// Global constants 
 const float leftirsensor_weight = -0.3f;
 const float left_weight = -0.1f;
 const float centerWeight = 0.0f;
 const float right_weight = 0.1f;
 const float rightirsensor_weight = 0.3f;
 
-// Function to read IR sensor value
+// Function to read IR sensor value and translate into binary I/O
+// Converts analog IR sensor reading into binary input (1 = line not detected, 0 = line detected)
 int sensor_value(int version) {
 
 
@@ -36,74 +61,67 @@ int sensor_value(int version) {
     return 0;
   }
 
-  delay(500);  // Small delay for stability
+ 
 }
 
-// Function to assign weights if values are 0
-
+// Weighted logic - Function for decision making 
 void weighted_logic(int &irLeftVal,  int &leftState, int &centerState, int &rightState, int &irRightVal) {
-    // Array to hold float sensor values
-   
-    // Array to hold integer state values
+
+    //Intialize paramters into an array
     int truth_values[] = {irLeftVal, leftState, centerState, rightState, irRightVal};
 
-  
+    //Initalizes global weights into an array
     const float weights[] = {leftirsensor_weight, left_weight, centerWeight, right_weight, rightirsensor_weight};
 
+    //Intializes the movement variable that will used in the line-follower's decision making
     float movement = 0;
 
+    //Loop essentially adds the value of a weight, if the corresponding sensor value is 0/ less light is reflected. 
     for (int i = 0; i < 5; i++) {
         if (truth_values[i] == 0) {
-            movement += weights[i];
+            movement += weights[i]; 
         }
     }
-// const float leftirsensor_weight = -0.3f;
-// const float left_weight = -0.1f;
-// const float centerWeight = 0.0f;
-// const float right_weight = 0.1f;
-// const float rightirsensor_weight = 0.3f;
+
 
     if (movement == 0){
+          //Forward Logic
           Serial.print(movement); Serial.println(" Robot: Forward");
+
           servoleft.writeMicroseconds(1300); 
-          servoright.writeMicroseconds(1700); // Opposite direction forward
+          servoright.writeMicroseconds(1700);
+
           delay(30);  // Wait before repeating
           
     }
     else if (movement < -0.09 ) {  // Corrected boundary check
-        // Slight left veer
+        // Right turn Logic
         Serial.print(movement);Serial.println(" Robot: S Right");
+
         servoleft.writeMicroseconds(1500);  
         servoright.writeMicroseconds(1700);
+        
         delay(30);  // Wait before repeating
  
     } 
     else if (movement > 0.09) {
+        //Left turn Logic
+        Serial.print(movement);Serial.println(" Robot: S Left");
+
         servoleft.writeMicroseconds(1300);  
         servoright.writeMicroseconds(1500);
   
-        Serial.print(movement);Serial.println(" Robot: S Left");
-        delay(30);  // Wait before repeating
+        delay(30); 
     }
-    // else if ( movement <= -0.3 ) {
-    //     // Hard left turn
-    //     servoleft.writeMicroseconds(1100);  // Left wheel slow (or reverse)
-    //     servoright.writeMicroseconds(1900); // Right wheel fast forward
-    //     Serial.println("Robot: Left");
-    // } 
-    // else if (movement >= 0.3) {
-    //     // Hard right turn
-    //     servoleft.writeMicroseconds(1900);  
-    //     servoright.writeMicroseconds(1100);
-    //     Serial.println("Robot: Right");
-    // }
+
     else{
-      
+      // Failsafe / drift handling
        servoleft.writeMicroseconds(1500);
        servoright.writeMicroseconds(1500);
+
        delay(100);
 
-    Serial.print(movement); Serial.println(" Issue");
+       Serial.print(movement); Serial.println("Issue");
     }
 
     
@@ -113,7 +131,8 @@ void weighted_logic(int &irLeftVal,  int &leftState, int &centerState, int &righ
 
 
 void setup() {
-     Serial.begin(9600); // Debugging output
+  
+  Serial.begin(9600); // Debugging output
 
   // Attach servos to their respective pins
   servoleft.attach(motorleft);
@@ -145,8 +164,10 @@ void loop() {
     Serial.print("  ir_leftState: "); Serial.print(Left_ir);
     Serial.print(" | leftState: "); Serial.print(leftState);
     Serial.print(" | centerState: "); Serial.print(centerState);
-    Serial.print(" | RightState: "); Serial.print(rightState);  // Moves to new line
+    Serial.print(" | RightState: "); Serial.print(rightState);  
     Serial.print(" | ir_rightState: "); Serial.println(Right_ir);
+
+
     if (Left_ir == 1 && leftState == 1 && centerState == 1 && rightState == 1 && Right_ir == 1) {
      servoleft.writeMicroseconds(1500);
      servoright.writeMicroseconds(1500);
@@ -159,32 +180,7 @@ void loop() {
           weighted_logic(Left_ir,  leftState, centerState, rightState, Right_ir);
     }
    
-    
-  
 
-  // if (( centerState == 0 &&  rightState == 1) && (leftState == 0 && centerState == 0 &&  rightState == 0) ) {
-  //   Serial.println("Moving Forward");
-  //   servoleft.writeMicroseconds(1300);  // Left wheel forward
-  //   servoright.writeMicroseconds(1700); // Right wheel forward
-  // }
-  
-  // // // Turn left when left sensor detects the line
-  // else if (((leftState == 0 && centerState == 0) || (leftState == 0 && centerState == 1 &&  rightState == 1))  &&  rightState == 1 ) {
-  //   Serial.println("Turning Left");
-  //       servoleft.writeMicroseconds(1700);  // Left wheel forward
-  //   servoright.writeMicroseconds(1500); // Right wheel stops/slows
-  // }
-  // // // Turn right when right sensor detects the line
-  // else if (((rightState == 0 && centerState == 0) || (rightState == 0 && centerState == 1))  &&  leftState == 1 ) {
-  //   Serial.println("Turning Right");
-
-
-  //       servoleft.writeMicroseconds(1500);  // Left wheel stops/slows
-  //   servoright.writeMicroseconds(1300); // Right wheel forward
-  // }
-  // else{
-  // // Stop if no sensor detects the line 
-  
 
     delay(100);  // Wait before repeating
 
