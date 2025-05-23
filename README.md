@@ -56,7 +56,6 @@ Course #1:  [Demo #1: Autonomous Line Following Robot](https://www.youtube.com/w
 
 Course #2:  [Demo #2: Autonomous Line Following Robot](https://youtu.be/u_tEcljQaS0?si=CvnIafdUAzQ-CT-G)
 
-Course #3:  [Demo #3: Autonomous Line Following Robot](https://www.youtube.com/watch?v=r_oM9L6rFqo)
+Course #3:  [Demo #3: Autonomous Line Following Robot](https://youtu.be/FmVCL2pEUbI?si=cRp6DwyrxZtuvAr8)
 
 
-+
