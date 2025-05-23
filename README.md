@@ -52,10 +52,10 @@ This system when tested would prove to be highly efficient by allowing the robot
 ![image](https://github.com/user-attachments/assets/5c9b1cf6-fdd7-4d9f-8190-5ba54e85abbe)
 
 
-Course #1:  [Demo #1: Autonomous Line Following Robot](https://www.youtube.com/watch?v=OqyYif4jq5Q&t=1s)
+Course #1:  [Demo #1: Autonomous Line Following Robot](https://www.youtube.com/watch?v=8cHOvXtO_xg)
 
-Course #2:  [Demo #2: Autonomous Line Following Robot](https://youtu.be/u_tEcljQaS0?si=CvnIafdUAzQ-CT-G)
+Course #2:  [Demo #2: Autonomous Line Following Robot](https://www.youtube.com/watch?v=Ys131DKlgjQ)
 
-Course #3:  [Demo #3: Autonomous Line Following Robot](https://youtu.be/FmVCL2pEUbI?si=cRp6DwyrxZtuvAr8)
+Course #3:  [Demo #3: Autonomous Line Following Robot](https://www.youtube.com/watch?v=kAPsqh_w_1o)
 
 
