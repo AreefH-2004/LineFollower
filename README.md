@@ -49,7 +49,7 @@ This system when tested would prove to be highly efficient by allowing the robot
 
 ✏️ Course Layouts 
 
-![image](https://github.com/user-attachments/assets/0af89f95-b868-460c-a2fb-35df76848caf)
+![image](https://github.com/user-attachments/assets/5c9b1cf6-fdd7-4d9f-8190-5ba54e85abbe)
 
 
 Course #1:  [Demo #1: Autonomous Line Following Robot](https://www.youtube.com/watch?v=OqyYif4jq5Q&t=1s)
