@@ -1,4 +1,4 @@
-Ardunio Line Follower W/ Weighted Logic 
+Autonomous Sensor-Driven Autonomous Line Following Robot for Real-Time Path Correction
 
 ![image](https://github.com/user-attachments/assets/0ea0355d-2070-4212-afcf-62e896c7523c)
 
@@ -37,10 +37,24 @@ const float centerWeight = 0.0f;
 const float right_weight = 0.1f;
 const float rightirsensor_weight = 0.3f;
 ```
+Sensors Layout Respective To Weights
+![image](https://github.com/user-attachments/assets/00107c2f-55ac-46f7-abd4-28756bd18188)
+
+
 In which belonged to the respective sensors:
 
 The system works as follows: if multiple sensors do not pick up light from a specific area, the respective sensors weight will be added together and the value will be fed through a function that decides which direction the robot would move. 
 
 This system when tested would prove to be highly efficient by allowing the robot to navigate through sharp turns and unique patterns on the track. 
 
+✏️ Course Layouts 
+
+![image](https://github.com/user-attachments/assets/0af89f95-b868-460c-a2fb-35df76848caf)
+
+
+Course #1 Demo 
+
+Course #2 Demo
+
+Course #3 Demo
 
